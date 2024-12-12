@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from .src.database.connection import Base, engine
-from .src.routes.user_routes import router as user_router
+from crud_fastapi.src.database.connection import Base, engine
+from crud_fastapi.src.routes.user_routes import router as user_router
 
 Base.metadata.create_all(bind=engine)
 
