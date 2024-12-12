@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "3.12.*"
 fastapi = {extras = ["standard"], version = "^0.115.6"}
+sqlalchemy = "^2.0.36"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.8.2"
@@ -20,7 +21,7 @@ pythonpath = "."
 addopts = '-p no:warnings'
 
 [tool.ruff]
-line-length = 79 # Numero de caracteres por linha
+line-length = 99 # Numero de caracteres por linha
 extend-exclude = ['migrations'] # não formata os codigos dentro de migrations
 
 [tool.ruff.lint]
@@ -32,7 +33,7 @@ preview = true
 quote-style = 'single'
 
 [tool.taskipy.tasks]
-run = 'fastapi dev crud_fastapi/app.py'
+run = 'fastapi dev crud_fastapi/main.py'
 pre_test = 'task lint'
 test = 'pytest -s -x --cov=crud_fastapi -vv'
 post_test = 'coverage html'
