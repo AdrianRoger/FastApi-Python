@@ -39,3 +39,4 @@ def test_create_user(test_client: TestClient):
         'username': 'Usuário de testes',
         'email': 'user_tester@example.com',
     }  # Assertion
+    # TODO : Criar os demais Testes
