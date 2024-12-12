@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from crud_fastapi.src.controllers.user_controller import (
     create_user_controller,
+    delete_user_by_id_controller,
     get_all_users_controller,
     get_user_by_email_controller,
     get_user_by_id_controller,
@@ -64,3 +65,12 @@ def update_user(id: int, user: UserUpdate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail=str(e))
     except ConflictError as e:
         raise HTTPException(status_code=HTTPStatus.CONFLICT, detail=str(e))
+
+
+@router.delete('/id')
+def delete_user_by_id(id: int, db: Session = Depends(get_db)):
+    try:
+        data = delete_user_by_id_controller(db, id)
+        return data
+    except ValueError as e:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail=str(e))

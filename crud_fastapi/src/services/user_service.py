@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 from crud_fastapi.src.repositories.user_repository import (
     create_user,
+    delete_user_by_id,
     get_all_users,
     get_user_by_email,
     get_user_by_id,
@@ -52,3 +53,9 @@ def update_user_service(db: Session, id: int, user: UserUpdate):
         raise ConflictError('Email already in use.')
 
     return update_user(db, id, user)
+
+
+def delete_user_by_id_service(db: Session, id: int):
+    success = delete_user_by_id(db, id)
+    if not success:
+        raise ValueError('User not found.')

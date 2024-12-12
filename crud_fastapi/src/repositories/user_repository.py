@@ -31,7 +31,7 @@ def get_all_users(db: Session, skip: int = 0, limit: int = 10):
 def update_user(db: Session, id: int, user: UserUpdate):
     existing_user = db.query(User).filter(User.id == id).first()
     if not existing_user:
-        return None
+        return False
 
     # update fields
     existing_user.username = user.username
@@ -41,3 +41,13 @@ def update_user(db: Session, id: int, user: UserUpdate):
     db.commit()
     db.refresh(existing_user)
     return existing_user
+
+
+def delete_user_by_id(db: Session, id: int):
+    existing_user = db.query(User).filter(User.id == id).first()
+    if not existing_user:
+        return False
+
+    db.delete(existing_user)
+    db.commit()
+    return True
