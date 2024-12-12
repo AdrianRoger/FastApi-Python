@@ -18,3 +18,9 @@ class UserResponse(BaseModel):
 
 class UserList(BaseModel):
     user: list[UserResponse]
+
+
+class UserUpdate(BaseModel):
+    username: str
+    email: EmailStr
+    password: str

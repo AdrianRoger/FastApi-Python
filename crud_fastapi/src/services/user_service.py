@@ -5,8 +5,13 @@ from crud_fastapi.src.repositories.user_repository import (
     get_all_users,
     get_user_by_email,
     get_user_by_id,
+    update_user,
 )
-from crud_fastapi.src.schemas.user_schemas import UserCreate
+from crud_fastapi.src.schemas.user_schemas import UserCreate, UserUpdate
+
+
+class ConflictError(Exception):
+    pass  # TODO Mudar para um pacote exclusivo para Exceptions
 
 
 def create_user_service(db: Session, user: UserCreate):
@@ -35,3 +40,15 @@ def get_all_users_service(db: Session, page: int = 1, limit: int = 10):
         raise ValueError('Page must be 1 or greater.')
 
     return get_all_users(db, (page - 1) * limit, limit)
+
+
+def update_user_service(db: Session, id: int, user: UserUpdate):
+    existing_user = get_user_by_id(db, id)
+    if not existing_user:
+        raise ValueError('user not found')
+
+    existing_email = get_user_by_email(db, email=user.email)
+    if existing_email and existing_email.id != id:
+        raise ConflictError('Email already in use.')
+
+    return update_user(db, id, user)

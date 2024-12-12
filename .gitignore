@@ -181,3 +181,5 @@ pyrightconfig.json
 crud_fastapi.db
 # SQLite Test Database
 memory.db
+# Removing __init__.py from commits
+*__init__.py

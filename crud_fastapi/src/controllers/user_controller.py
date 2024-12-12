@@ -1,11 +1,12 @@
 from sqlalchemy.orm import Session
 
-from crud_fastapi.src.schemas.user_schemas import UserCreate
+from crud_fastapi.src.schemas.user_schemas import UserCreate, UserUpdate
 from crud_fastapi.src.services.user_service import (
     create_user_service,
     get_all_users_service,
     get_user_by_email_service,
     get_user_by_id_service,
+    update_user_service,
 )
 
 
@@ -33,5 +34,12 @@ def get_user_by_id_controller(db: Session, id: int):
 def get_all_users_controller(db: Session, page: int = 1, limit: int = 10):
     try:
         return get_all_users_service(db, page, limit)
+    except ValueError as e:
+        raise e
+
+
+def update_user_controller(db: Session, id: int, user: UserUpdate):
+    try:
+        return update_user_service(db, id, user)
     except ValueError as e:
         raise e

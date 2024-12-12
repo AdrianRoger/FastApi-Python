@@ -9,9 +9,11 @@ from crud_fastapi.src.controllers.user_controller import (
     get_all_users_controller,
     get_user_by_email_controller,
     get_user_by_id_controller,
+    update_user_controller,
 )
 from crud_fastapi.src.database.connection import get_db
-from crud_fastapi.src.schemas.user_schemas import UserCreate, UserResponse
+from crud_fastapi.src.schemas.user_schemas import UserCreate, UserResponse, UserUpdate
+from crud_fastapi.src.services.user_service import ConflictError
 
 router = APIRouter()
 
@@ -51,3 +53,14 @@ def get_all_users(page: int = 1, limit: int = 10, db: Session = Depends(get_db))
         return users
     except ValueError as e:
         raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail=str(e))
+
+
+@router.put('/{id}')
+def update_user(id: int, user: UserUpdate, db: Session = Depends(get_db)):
+    try:
+        user_updated = update_user_controller(db, id, user)
+        return user_updated
+    except ValueError as e:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail=str(e))
+    except ConflictError as e:
+        raise HTTPException(status_code=HTTPStatus.CONFLICT, detail=str(e))
