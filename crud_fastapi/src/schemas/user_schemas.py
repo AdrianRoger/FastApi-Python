@@ -14,3 +14,7 @@ class UserResponse(BaseModel):
 
     class Config:
         from_attibutes = True
+
+
+class UserList(BaseModel):
+    user: list[UserResponse]
