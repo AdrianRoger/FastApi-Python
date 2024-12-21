@@ -1,3 +1,5 @@
+from typing import List
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -7,6 +9,8 @@ from sqlalchemy.pool import StaticPool
 from crud_fastapi.main import app
 from crud_fastapi.src.database.connection import Base, get_db
 from crud_fastapi.src.models.user_model import User
+from crud_fastapi.src.schemas.user_schemas import UserCreate
+from tests.fixtures.data import USERS_FIXTURE_1, USERS_FIXTURE_2, USERS_FIXTURE_LARGE
 
 TEST_DATABASE_URL = 'sqlite:///:memory:'
 
@@ -48,17 +52,38 @@ def test_client(test_db):
         yield client
 
 
-# Created user fixture
+# Axiliary Function
+def seed_users(db: Session, users_data: List[UserCreate]):
+    """Helper function to seed users"""
+    for user_data in users_data:
+        db_user = User(**user_data.model_dump())
+        db.add(db_user)
+    db.commit()
+
+
+# Create Fixture for each data case
 @pytest.fixture
-def db_with_single_user(test_db: Session):
-    user_data = {
-        'username': 'teste user',
-        'email': 'teste_user@example.com',
-        'password': 'securepassword',
-    }
+def db_with_users_1(test_db: Session):
+    """Fixture with first set of users"""
+    seed_users(test_db, USERS_FIXTURE_1)
+    return test_db
 
-    user = User(**user_data)
-    test_db.add(user)
-    test_db.commit()
 
-    return user, test_db
+@pytest.fixture
+def db_with_users_2(test_db: Session):
+    """Fixture with second set of users"""
+    seed_users(test_db, USERS_FIXTURE_2)
+    return test_db
+
+
+@pytest.fixture
+def db_empty(test_db: Session):
+    """Fixture with no users"""
+    return test_db
+
+
+@pytest.fixture
+def db_with_many_users(test_db: Session):
+    """Fixture with many users"""
+    seed_users(test_db, USERS_FIXTURE_LARGE)
+    return test_db
