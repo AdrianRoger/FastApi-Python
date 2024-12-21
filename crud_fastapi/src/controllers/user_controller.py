@@ -44,7 +44,7 @@ def update_user_controller(db: Session, id: int, user: UserUpdate):
         return update_user_service(db, id, user)
     except ValueError as e:
         raise e
-    
+
 
 def delete_user_by_id_controller(db: Session, id: int):
     try:
