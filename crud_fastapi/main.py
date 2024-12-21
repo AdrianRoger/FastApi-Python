@@ -9,7 +9,7 @@ app = FastAPI()
 
 
 app.include_router(user_router, prefix='/users', tags=['Users'])
-# TODO : Criar Pacote Exception 
+# TODO : Criar Pacote Exception
 # TODO : Criar Request Body Validations
 # TODO : Autenticação e Autorização
 # TODO : Mudar o Banco para postgres
