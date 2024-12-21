@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 
 import pytest
 from fastapi.testclient import TestClient
@@ -53,9 +53,10 @@ def test_client(test_db):
 
 
 # Axiliary Function
-def seed_users(db: Session, users_data: List[UserCreate]):
+def seed_users(db: Session, users_data: List[Union[UserCreate, dict]]):
     """Helper function to seed users"""
-    for user_data in users_data:
+    for raw_data in users_data:
+        user_data = UserCreate(**raw_data) if isinstance(raw_data, dict) else raw_data
         db_user = User(**user_data.model_dump())
         db.add(db_user)
     db.commit()
