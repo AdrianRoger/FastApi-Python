@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-TEST_DATABASE_URL = 'sqlite:///./memory.db'
+TEST_DATABASE_URL = 'sqlite:///./:memory:'
 
 
 engine = create_engine(
